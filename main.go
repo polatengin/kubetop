@@ -29,6 +29,15 @@ func main() {
 		fmt.Printf("Error creating Kubernetes clientset: %v\n", err)
 		return
 	}
+
+	// Start the HTTP server on the specified port
+	port := "9000"
+	fmt.Printf("HTTP server started on http://localhost:%s...\n", port)
+	err = http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		fmt.Printf("Error starting HTTP server: %v\n", err)
+		return
+	}
 }
 
 func loadKubeConfig() (*rest.Config, error) {
