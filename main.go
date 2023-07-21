@@ -65,6 +65,18 @@ func main() {
 		json.NewEncoder(w).Encode(pods)
 	})
 
+	http.HandleFunc("/services", func(w http.ResponseWriter, r *http.Request) {
+		services, err := clientset.CoreV1().Services("").List(context.TODO(), metav1.ListOptions{})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Error getting services: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Marshal services into JSON and write the response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(services)
+	})
+
 	// Start the HTTP server on the specified port
 	port := "9000"
 	fmt.Printf("HTTP server started on http://localhost:%s...\n", port)
