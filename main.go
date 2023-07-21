@@ -29,6 +29,17 @@ func main() {
 		fmt.Printf("Error creating Kubernetes clientset: %v\n", err)
 		return
 	}
+	http.HandleFunc("/namespaces", func(w http.ResponseWriter, r *http.Request) {
+		namespaces, err := clientset.CoreV1().Namespaces().List(context.TODO(), metav1.ListOptions{})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Error getting namespaces: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Marshal namespaces into JSON and write the response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(namespaces)
+	})
 
 	// Start the HTTP server on the specified port
 	port := "9000"
