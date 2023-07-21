@@ -53,6 +53,18 @@ func main() {
 		json.NewEncoder(w).Encode(deployments)
 	})
 
+	http.HandleFunc("/pods", func(w http.ResponseWriter, r *http.Request) {
+		pods, err := clientset.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Error getting pods: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Marshal pods into JSON and write the response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(pods)
+	})
+
 	// Start the HTTP server on the specified port
 	port := "9000"
 	fmt.Printf("HTTP server started on http://localhost:%s...\n", port)
