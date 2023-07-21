@@ -41,6 +41,18 @@ func main() {
 		json.NewEncoder(w).Encode(namespaces)
 	})
 
+	http.HandleFunc("/deployments", func(w http.ResponseWriter, r *http.Request) {
+		deployments, err := clientset.AppsV1().Deployments("").List(context.TODO(), metav1.ListOptions{})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Error getting deployments: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Marshal deployments into JSON and write the response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(deployments)
+	})
+
 	// Start the HTTP server on the specified port
 	port := "9000"
 	fmt.Printf("HTTP server started on http://localhost:%s...\n", port)
