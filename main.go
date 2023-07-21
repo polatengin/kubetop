@@ -65,6 +65,27 @@ func main() {
 		json.NewEncoder(w).Encode(pods)
 	})
 
+	http.HandleFunc("/pods-from-deployment", func(w http.ResponseWriter, r *http.Request) {
+		deploymentID := r.URL.Query().Get("id")
+		if deploymentID == "" {
+			http.Error(w, "Please provide a deployment ID in the 'id' query parameter.", http.StatusBadRequest)
+			return
+		}
+
+		// Get pods from the specified deployment
+		pods, err := clientset.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{
+			LabelSelector: "app=" + deploymentID,
+		})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Error getting pods from the deployment: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Marshal pods into JSON and write the response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(pods)
+	})
+
 	http.HandleFunc("/services", func(w http.ResponseWriter, r *http.Request) {
 		services, err := clientset.CoreV1().Services("").List(context.TODO(), metav1.ListOptions{})
 		if err != nil {
