@@ -29,6 +29,30 @@ func main() {
 		fmt.Printf("Error creating Kubernetes clientset: %v\n", err)
 		return
 	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		html := `
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<title>Kubernetes API Endpoints</title>
+		</head>
+		<body>
+			<h1>Kubernetes API Endpoints</h1>
+			<ul>
+				<li><a href="/namespaces">Namespaces</a></li>
+				<li><a href="/deployments">Deployments</a></li>
+				<li><a href="/pods">Pods</a></li>
+				<li><a href="/services">Services</a></li>
+			</ul>
+		</body>
+		</html>
+	`
+
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprint(w, html)
+	})
+
 	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
 		links := map[string]string{
 			"namespaces":  "/namespaces",
