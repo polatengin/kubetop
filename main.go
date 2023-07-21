@@ -29,6 +29,19 @@ func main() {
 		fmt.Printf("Error creating Kubernetes clientset: %v\n", err)
 		return
 	}
+	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
+		links := map[string]string{
+			"namespaces":  "/namespaces",
+			"deployments": "/deployments",
+			"pods":        "/pods",
+			"services":    "/services",
+		}
+
+		// Marshal links into JSON and write the response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(links)
+	})
+
 	http.HandleFunc("/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		namespaces, err := clientset.CoreV1().Namespaces().List(context.TODO(), metav1.ListOptions{})
 		if err != nil {
