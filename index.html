@@ -54,6 +54,10 @@
           deployments.forEach(deployment => {
             links.push({ source: node.id, target: deployment.id });
           });
+          const pods = nodes.filter(e => e.type === "pod" && e.metadata.namespace === node.metadata.name);
+          pods.forEach(pod => {
+            links.push({ source: node.id, target: pod.id });
+          });
         }
       });
 
