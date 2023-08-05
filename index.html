@@ -31,6 +31,16 @@
   <h1>Kubernetes Topology Diagram</h1>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script>
+    function processData(data) {
+      const allData = [
+        ...data.nodes.map(e => { return { ...e, type: "node" }; }),
+        ...data.namespaces.map(e => { return { ...e, type: "namespace" }; }),
+        ...data.deployments.map(e => { return { ...e, type: "deployment" }; }),
+        ...data.services.map(e => { return { ...e, type: "service" }; }),
+        ...data.pods.map(e => { return { ...e, type: "pod" }; })
+      ];
+    }
+
     async function fetchDataFromEndpoints() {
       const responseNodes = await fetch('/nodes');
       const nodes = await responseNodes.json();
