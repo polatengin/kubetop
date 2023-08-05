@@ -80,6 +80,14 @@
       const responsePods = await fetch('/pods');
       const pods = await responsePods.json();
 
+      const data = processData({
+        nodes: nodes.items,
+        namespaces: namespaces.items,
+        deployments: deployments.items,
+        services: services.items,
+        pods: pods.items
+      });
+
     }
 
     fetchDataFromEndpoints();
