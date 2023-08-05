@@ -41,7 +41,6 @@ func main() {
 			"services":    "/services",
 		}
 
-		// Marshal links into JSON and write the response
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(links)
 	})
