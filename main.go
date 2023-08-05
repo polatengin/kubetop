@@ -45,6 +45,17 @@ func main() {
 		json.NewEncoder(w).Encode(links)
 	})
 
+	http.HandleFunc("/nodes", func(w http.ResponseWriter, r *http.Request) {
+		nodes, err := clientset.CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Error getting nodes: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(nodes)
+	})
+
 	http.HandleFunc("/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		namespaces, err := clientset.CoreV1().Namespaces().List(context.TODO(), metav1.ListOptions{})
 		if err != nil {
