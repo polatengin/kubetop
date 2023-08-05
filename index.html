@@ -30,5 +30,26 @@
 <body>
   <h1>Kubernetes Topology Diagram</h1>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    async function fetchDataFromEndpoints() {
+      const responseNodes = await fetch('/nodes');
+      const nodes = await responseNodes.json();
+
+      const responseNamespaces = await fetch('/namespaces');
+      const namespaces = await responseNamespaces.json();
+
+      const responseDeployments = await fetch('/deployments');
+      const deployments = await responseDeployments.json();
+
+      const responseServices = await fetch('/services');
+      const services = await responseServices.json();
+
+      const responsePods = await fetch('/pods');
+      const pods = await responsePods.json();
+
+    }
+
+    fetchDataFromEndpoints();
+  </script>
 </body>
 </html>
