@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"text/template"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -35,6 +36,7 @@ func main() {
 
 	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
 		links := map[string]string{
+			"nodes":       "/nodes",
 			"namespaces":  "/namespaces",
 			"deployments": "/deployments",
 			"pods":        "/pods",
