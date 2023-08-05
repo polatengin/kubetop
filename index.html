@@ -39,6 +39,13 @@
         ...data.services.map(e => { return { ...e, type: "service" }; }),
         ...data.pods.map(e => { return { ...e, type: "pod" }; })
       ];
+      const nodes = allData.map(e => {
+        return {
+          id: Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join(''),
+          group: 0,
+          ...e
+        };
+      });
     }
 
     async function fetchDataFromEndpoints() {
