@@ -52,7 +52,6 @@ func main() {
 			return
 		}
 
-		// Marshal namespaces into JSON and write the response
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(namespaces)
 	})
@@ -64,7 +63,6 @@ func main() {
 			return
 		}
 
-		// Marshal deployments into JSON and write the response
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(deployments)
 	})
@@ -76,7 +74,6 @@ func main() {
 			return
 		}
 
-		// Marshal pods into JSON and write the response
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(pods)
 	})
@@ -88,7 +85,6 @@ func main() {
 			return
 		}
 
-		// Get pods from the specified deployment
 		pods, err := clientset.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{
 			LabelSelector: "app=" + deploymentID,
 		})
@@ -97,7 +93,6 @@ func main() {
 			return
 		}
 
-		// Marshal pods into JSON and write the response
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(pods)
 	})
@@ -109,12 +104,10 @@ func main() {
 			return
 		}
 
-		// Marshal services into JSON and write the response
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(services)
 	})
 
-	// Start the HTTP server on the specified port
 	port := "9000"
 	fmt.Printf("HTTP server started on http://localhost:%s...\n", port)
 	err = http.ListenAndServe(":"+port, nil)
@@ -128,7 +121,6 @@ func loadKubeConfig() (*rest.Config, error) {
 	home := homedir.HomeDir()
 	kubeconfig := filepath.Join(home, ".kube", "config")
 
-	// Use in-cluster config if it exists, otherwise, use the kubeconfig from the local computer
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
