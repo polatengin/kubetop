@@ -16,14 +16,12 @@ import (
 )
 
 func main() {
-	// Load Kubernetes config from the local computer
 	config, err := loadKubeConfig()
 	if err != nil {
 		fmt.Printf("Error loading Kubernetes config: %v\n", err)
 		return
 	}
 
-	// Create Kubernetes clientset
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		fmt.Printf("Error creating Kubernetes clientset: %v\n", err)
