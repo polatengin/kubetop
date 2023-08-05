@@ -46,6 +46,18 @@
           ...e
         };
       });
+
+      const links = [];
+      nodes.forEach(node => {
+        if (node.type === "namespace") {
+          const deployments = nodes.filter(e => e.type === "deployment" && e.metadata.namespace === node.metadata.name);
+          deployments.forEach(deployment => {
+            links.push({ source: node.id, target: deployment.id });
+          });
+        }
+      });
+
+      return { nodes, links };
     }
 
     async function fetchDataFromEndpoints() {
